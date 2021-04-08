@@ -44,6 +44,9 @@ function setup() {
 }
 
 function draw() {
+  
+  mouseX = mouseX - 0.5;
+  mouseY = mouseY - 0.5;
 
   if (iPressed) {
     input.position(0, 0);
