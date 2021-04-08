@@ -1,25 +1,27 @@
 var pmousex, pmousey;
-var bg;
+var bg, drawOn;
 var drawingMode;
 let pGraphics;  
 var pmousepressed = false;
 var vertex1;
 var backgroundShowing = false;
 var rPressed, cPressed, iPressed, lPressed;
+var strkWeight;
 
 let input;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
+  strkWeight = 5;
   pGraphics = createGraphics(windowWidth, windowHeight);
   pGraphics.background(255);
   pGraphics.stroke(0);
-  pGraphics.strokeWeight(5);
+  pGraphics.strokeWeight(strkWeight);
   pGraphics.noFill();
   pGraphics.rectMode(CORNERS);
   stroke(0);
-  strokeWeight(5);
+  strokeWeight(strkWeight);
   noFill();
   rectMode(CORNERS);
 
@@ -30,14 +32,20 @@ function setup() {
     if (file.type === 'image') {
       bg = createImg(file.data, '');
       bg.hide();
-      input.position(-9999, -9999);
     }
+    input.position(-9999, -9999);
   }
   );
   input.position(-9999, -9999);
 }
 
 function draw() {
+
+  if (iPressed) {
+    input.position(0, 0);
+  } else {
+    input.position(-9999, -9999);
+  }
 
   if (backgroundShowing) {
     image(bg, 0, 0, width, height);
@@ -56,12 +64,6 @@ function draw() {
       var r = sqrt((mouseX-vertex1.x)*(mouseX-vertex1.x) + (mouseY-vertex1.y)*(mouseY-vertex1.y));
       ellipse(vertex1.x, vertex1.y, r*2, r*2);
     }
-  }
-
-  if (iPressed) {
-    input.position(0, 0);
-  } else {
-    input.position(-9999, -9999);
   }
 
   pmousex = mouseX;
@@ -143,4 +145,9 @@ function mouseReleased() {
     pGraphics.ellipse(vertex1.x, vertex1.y, r*2, r*2);
   }
   drawingMode = 0;
+}
+function mouseWheel(event) {
+  strkWeight = constrain(strkWeight + event.delta/100, 1, 100);
+  pGraphics.strokeWeight(strkWeight);
+  strokeWeight(strkWeight);
 }
