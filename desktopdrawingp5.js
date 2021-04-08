@@ -8,6 +8,7 @@ var rPressed, cPressed, iPressed, lPressed;
 var strkWeight;
 var whiteDrawing = false;
 let input;
+let colorPicker;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -36,6 +37,8 @@ function setup() {
   }
   );
   input.position(-9999, -9999);
+  colorPicker = createColorPicker('#000000');
+  colorPicker.position(0, 0);
 }
 
 function draw() {
@@ -54,6 +57,9 @@ function draw() {
     pGraphics.stroke(0);
   }
 
+  stroke(colorPicker.color());
+  pGraphics.stroke(colorPicker.color());
+
   if (backgroundShowing) {
     image(bg, 0, 0, width, height);
     cursor();
@@ -71,6 +77,10 @@ function draw() {
     if (mouseIsPressed && drawingMode == 2 && cPressed) {
       var r = sqrt((mouseX-vertex1.x)*(mouseX-vertex1.x) + (mouseY-vertex1.y)*(mouseY-vertex1.y));
       ellipse(vertex1.x, vertex1.y, r*2, r*2);
+    }
+
+    if (mouseIsPressed && drawingMode == 3 && lPressed) {
+      line(vertex1.x, vertex1.y, mouseX, mouseY);
     }
 
     point(mouseX, mouseY);
@@ -142,6 +152,9 @@ function mousePressed() {
   if (cPressed) {
     drawingMode = 2;
   }
+  if (lPressed) {
+    drawingMode = 3;
+  }
   if (drawingMode != 0) {
     vertex1 = createVector(mouseX, mouseY);
   }
@@ -156,6 +169,10 @@ function mouseReleased() {
     var r = sqrt((mouseX-vertex1.x)*(mouseX-vertex1.x) + (mouseY-vertex1.y)*(mouseY-vertex1.y));
     ellipse(vertex1.x, vertex1.y, r*2, r*2);
     pGraphics.ellipse(vertex1.x, vertex1.y, r*2, r*2);
+  }
+  if (drawingMode == 3 && lPressed) {
+    line(vertex1.x, vertex1.y, mouseX, mouseY);
+    pGraphics.line(vertex1.x, vertex1.y, mouseX, mouseY);
   }
   drawingMode = 0;
 }
