@@ -49,7 +49,7 @@ function draw() {
   } else {
     input.position(-9999, -9999);
   }
-  
+
   if (showingColorPicker) {
     colorPicker.position(width-45, 0);
   } else {
@@ -82,7 +82,21 @@ function draw() {
       line(vertex1.x, vertex1.y, mouseX, mouseY);
     }
 
-    point(mouseX, mouseY);
+    // cursor
+    if (rPressed) {
+      strokeWeight(2);
+      rect(mouseX-5, mouseY-5, mouseX+5, mouseY+5);
+    } else if (cPressed) {
+      strokeWeight(2);
+      ellipse(mouseX, mouseY, 10, 10);
+    } else if (lPressed) {
+      strokeWeight(2);
+      line(mouseX, mouseY, mouseX+10, mouseY-10);
+      ellipse(mouseX, mouseY, 4, 4);
+    } else {
+      point(mouseX, mouseY);
+    }
+    strokeWeight(strkWeight);
   }
 
   pmousex = mouseX;
