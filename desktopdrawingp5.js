@@ -10,11 +10,12 @@ var whiteDrawing = false;
 let input;
 let colorPicker;
 var showingColorPicker;
+var fillMode = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  strkWeight = 5;
+  strkWeight = 3;
   pGraphics = createGraphics(windowWidth, windowHeight);
   pGraphics.background(255);
   pGraphics.stroke(0);
@@ -54,6 +55,14 @@ function draw() {
     colorPicker.position(width-45, 0);
   } else {
     colorPicker.position(-9999, -9999);
+  }
+
+  if (fillMode) {
+    fill(colorPicker.color());
+    pGraphics.fill(colorPicker.color());
+  } else {
+    noFill();
+    pGraphics.noFill();
   }
 
   stroke(colorPicker.color());
@@ -140,6 +149,9 @@ function keyPressed() {
   }
   if (key == 'h') {
     showingColorPicker = !showingColorPicker;
+  }
+  if (key == 'f') {
+    fillMode = !fillMode;
   }
 }
 
