@@ -150,7 +150,7 @@ function mouseReleased() {
   drawingMode = 0;
 }
 function mouseWheel(event) {
-  strkWeight = constrain(strkWeight + event.delta/200, 0.25, 100);
+  strkWeight = constrain(strkWeight + event.delta/200, 0.5, 100);
   pGraphics.strokeWeight(strkWeight);
   strokeWeight(strkWeight);
 }
