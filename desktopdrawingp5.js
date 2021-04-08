@@ -30,6 +30,7 @@ function setup() {
     if (file.type === 'image') {
       bg = createImg(file.data, '');
       bg.hide();
+      input.position(-9999, -9999);
     }
   }
   );
@@ -60,7 +61,7 @@ function draw() {
   if (iPressed) {
     input.position(0, 0);
   } else {
-    input.position(-9000, -9000);
+    input.position(-9999, -9999);
   }
 
   pmousex = mouseX;
