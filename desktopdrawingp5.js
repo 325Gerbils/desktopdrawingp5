@@ -46,12 +46,12 @@ function draw() {
     input.position(-9999, -9999);
   }
 
-  if(whiteDrawing) {
+  if (whiteDrawing) {
     stroke(255);
     pGraphics.stroke(255);
-  }else{
+  } else {
     stroke(0);
-     pGraphics.stroke(0);
+    pGraphics.stroke(0);
   }
 
   if (backgroundShowing) {
