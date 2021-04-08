@@ -49,8 +49,9 @@ function draw() {
 
   if (backgroundShowing) {
     image(bg, 0, 0, width, height);
+    cursor();
   } else {
-
+    noCursor();
     if (mouseIsPressed && drawingMode == 0) {
       pGraphics.line(mouseX, mouseY, pmousex, pmousey);
     }
@@ -64,6 +65,8 @@ function draw() {
       var r = sqrt((mouseX-vertex1.x)*(mouseX-vertex1.x) + (mouseY-vertex1.y)*(mouseY-vertex1.y));
       ellipse(vertex1.x, vertex1.y, r*2, r*2);
     }
+
+    point(mouseX, mouseY);
   }
 
   pmousex = mouseX;
@@ -147,7 +150,7 @@ function mouseReleased() {
   drawingMode = 0;
 }
 function mouseWheel(event) {
-  strkWeight = constrain(strkWeight + event.delta/100, 1, 100);
+  strkWeight = constrain(strkWeight + event.delta/200, 1, 100);
   pGraphics.strokeWeight(strkWeight);
   strokeWeight(strkWeight);
 }
