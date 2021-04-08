@@ -1,21 +1,24 @@
 var pmousex, pmousey;
 var bg, drawOn;
 var drawingMode;
-let pGraphics;  
+let pGraphics; 
 var vertex1;
 var backgroundShowing = false;
-var rPressed, cPressed, iPressed, lPressed;
+var rPressed, cPressed, iPressed, lPressed, hPressed, ePressed;
 var strkWeight;
 var whiteDrawing = false;
 let input;
+var currentColor;
 let colorPicker;
-var showingColorPicker;
+var colorPickerShowing;
 var fillMode = false;
+var shiftPressed, altPressed;
+var brightness;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  strkWeight = 3;
+  strkWeight = 5;
   pGraphics = createGraphics(windowWidth, windowHeight);
   pGraphics.background(255);
   pGraphics.stroke(0);
@@ -26,6 +29,8 @@ function setup() {
   strokeWeight(strkWeight);
   noFill();
   rectMode(CORNERS);
+  currentColor = color(0);
+  brightness = 255;
 
   bg = loadImage("data/background.jpg");
   drawingMode = 0;
@@ -39,58 +44,57 @@ function setup() {
   }
   );
   input.position(-9999, -9999);
-  colorPicker = createColorPicker('#000000');
-  colorPicker.position(-9999, -9999);
+
+  colorPicker = createGraphics(windowWidth, windowHeight);
+  drawColorPicker();
 }
 
 function draw() {
-  
-  mouseX = mouseX - 0.5;
-  mouseY = mouseY - 0.5;
 
   if (iPressed) {
     input.position(0, 0);
   } else {
     input.position(-9999, -9999);
   }
-
-  if (showingColorPicker) {
-    colorPicker.position(width-45, 0);
-  } else {
-    colorPicker.position(-9999, -9999);
-  }
+  colorPickerShowing = hPressed;
 
   if (fillMode) {
-    fill(colorPicker.color());
-    pGraphics.fill(colorPicker.color());
+    fill(currentColor);
+    pGraphics.fill(currentColor);
   } else {
     noFill();
     pGraphics.noFill();
   }
 
-  stroke(colorPicker.color());
-  pGraphics.stroke(colorPicker.color());
+  stroke(currentColor);
+  pGraphics.stroke(currentColor);
 
   if (backgroundShowing) {
     image(bg, 0, 0, width, height);
     cursor();
+  } else if (colorPickerShowing) {
+    cursor();
+    image(colorPicker, 0, 0, width, height);
+    strokeWeight(2);
+    //fill(get(mouseX, mouseY));
+    ellipse(mouseX+30, mouseY+40, 50, 50);
   } else {
     noCursor();
-    if (mouseIsPressed && drawingMode == 0) {
-      pGraphics.line(mouseX, mouseY, pmousex, pmousey);
+    if (mouseIsPressed && mouseButton == LEFT && drawingMode == 0 && !ePressed) {
+      pGraphics.line(mouseX, mouseY, pmouseX, pmouseY);
     }
     image(pGraphics, 0, 0, width, height);
 
-    if (mouseIsPressed && drawingMode == 1 && rPressed) {
+    if (mouseIsPressed && mouseButton == LEFT && drawingMode == 1 && rPressed) {
       rect(vertex1.x, vertex1.y, mouseX, mouseY);
     }
 
-    if (mouseIsPressed && drawingMode == 2 && cPressed) {
+    if (mouseIsPressed && mouseButton == LEFT && drawingMode == 2 && cPressed) {
       var r = sqrt((mouseX-vertex1.x)*(mouseX-vertex1.x) + (mouseY-vertex1.y)*(mouseY-vertex1.y));
       ellipse(vertex1.x, vertex1.y, r*2, r*2);
     }
 
-    if (mouseIsPressed && drawingMode == 3 && lPressed) {
+    if (mouseIsPressed && mouseButton == LEFT && drawingMode == 3 && lPressed) {
       line(vertex1.x, vertex1.y, mouseX, mouseY);
     }
 
@@ -104,14 +108,16 @@ function draw() {
       strokeWeight(2);
       line(mouseX, mouseY, mouseX+10, mouseY-10);
       ellipse(mouseX, mouseY, 4, 4);
+    } else if (ePressed) {
+      cursor();
+      strokeWeight(2);
+      //fill(get(mouseX, mouseY));
+      ellipse(mouseX+30, mouseY+40, 50, 50);
     } else { // scribble
       point(mouseX, mouseY);
     }
     strokeWeight(strkWeight);
   }
-
-  pmousex = mouseX;
-  pmousey = mouseY;
 }
 
 function keyPressed() {
@@ -149,11 +155,20 @@ function keyPressed() {
   if (key == 'i') {
     iPressed = true;
   }
-  if (key == 'h') {
-    showingColorPicker = !showingColorPicker;
-  }
   if (key == 'f') {
     fillMode = !fillMode;
+  }
+  if (keyCode == SHIFT) {
+    shiftPressed = true;
+  }
+  if (keyCode == ALT) {
+    altPressed = true;
+  }
+  if (key == 'h') {
+    hPressed = true;
+  }
+  if (key == 'e') {
+    ePressed = true;
   }
 }
 
@@ -170,6 +185,18 @@ function keyReleased() {
   if (key == 'i') {
     iPressed = false;
   }
+  if (keyCode == SHIFT) {
+    shiftPressed = false;
+  }
+  if (keyCode == ALT) {
+    altPressed = false;
+  }
+  if (key == 'h') {
+    hPressed = false;
+  }
+  if (key == 'e') {
+    ePressed = false;
+  }
 }
 
 function mousePressed() {
@@ -181,6 +208,9 @@ function mousePressed() {
   }
   if (lPressed) {
     drawingMode = 3;
+  }
+  if (ePressed || colorPickerShowing) {
+    currentColor = get(mouseX, mouseY);
   }
   if (drawingMode != 0) {
     vertex1 = createVector(mouseX, mouseY);
@@ -204,7 +234,28 @@ function mouseReleased() {
   drawingMode = 0;
 }
 function mouseWheel(event) {
-  strkWeight = constrain(strkWeight - event.delta/150, 1, 1000);
-  pGraphics.strokeWeight(strkWeight);
-  strokeWeight(strkWeight);
+  if (colorPickerShowing) {
+    brightness = constrain(brightness - event.delta, 0, 255);
+    //colorPicker.tint(brightness);
+    drawColorPicker();
+  } else {
+    strkWeight = constrain(strkWeight - event.delta/(shiftPressed?15:(altPressed?500:150)), 1, 1000);
+    pGraphics.strokeWeight(strkWeight);
+    strokeWeight(strkWeight);
+  }
+}
+
+function drawColorPicker() {
+  colorPicker.colorMode(HSB, 255);
+  colorPicker.noStroke();
+  var w = 32;
+  for (let i = 0; i < colorPicker.width/w; i++) {
+    for (let j = 0; j < colorPicker.height/w; j++) {
+      //var clr = color(i/width, j/height, brightness);
+      //colorPicker.fill(random(255), random(255), random(255));
+      colorPicker.fill(i/(colorPicker.width/w)*255, 255-j/(colorPicker.height/w)*255, round(brightness/w)*w);
+      //colorPicker.point(i, j);
+      colorPicker.rect(i*w, j*w, w, w);
+    }
+  }
 }
