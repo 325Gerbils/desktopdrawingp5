@@ -9,6 +9,7 @@ var strkWeight;
 var whiteDrawing = false;
 let input;
 let colorPicker;
+var showingColorPicker;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -38,7 +39,7 @@ function setup() {
   );
   input.position(-9999, -9999);
   colorPicker = createColorPicker('#000000');
-  colorPicker.position(0, 0);
+  colorPicker.position(-9999, -9999);
 }
 
 function draw() {
@@ -48,13 +49,11 @@ function draw() {
   } else {
     input.position(-9999, -9999);
   }
-
-  if (whiteDrawing) {
-    stroke(255);
-    pGraphics.stroke(255);
+  
+  if (showingColorPicker) {
+    colorPicker.position(width-40, 0);
   } else {
-    stroke(0);
-    pGraphics.stroke(0);
+    colorPicker.position(-9999, -9999);
   }
 
   stroke(colorPicker.color());
@@ -125,8 +124,8 @@ function keyPressed() {
   if (key == 'i') {
     iPressed = true;
   }
-  if (key == 'x') {
-    whiteDrawing = !whiteDrawing;
+  if (key == 'h') {
+    showingColorPicker = !showingColorPicker;
   }
 }
 
@@ -177,7 +176,7 @@ function mouseReleased() {
   drawingMode = 0;
 }
 function mouseWheel(event) {
-  strkWeight = constrain(strkWeight + event.delta/200, 0.5, 1000);
+  strkWeight = constrain(strkWeight - event.delta/150, 0.5, 1000);
   pGraphics.strokeWeight(strkWeight);
   strokeWeight(strkWeight);
 }
