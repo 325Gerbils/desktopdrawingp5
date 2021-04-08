@@ -91,18 +91,17 @@ function draw() {
       line(vertex1.x, vertex1.y, mouseX, mouseY);
     }
 
-    // cursor
-    if (rPressed) {
+    if (rPressed) { // rect
       strokeWeight(2);
       rect(mouseX-5, mouseY-5, mouseX+5, mouseY+5);
-    } else if (cPressed) {
+    } else if (cPressed) { // circle
       strokeWeight(2);
       ellipse(mouseX, mouseY, 10, 10);
-    } else if (lPressed) {
+    } else if (lPressed) { // line
       strokeWeight(2);
       line(mouseX, mouseY, mouseX+10, mouseY-10);
       ellipse(mouseX, mouseY, 4, 4);
-    } else {
+    } else { // scribble
       point(mouseX, mouseY);
     }
     strokeWeight(strkWeight);
@@ -202,7 +201,7 @@ function mouseReleased() {
   drawingMode = 0;
 }
 function mouseWheel(event) {
-  strkWeight = constrain(strkWeight - event.delta/150, 0.5, 1000);
+  strkWeight = constrain(strkWeight - event.delta/150, 1, 1000);
   pGraphics.strokeWeight(strkWeight);
   strokeWeight(strkWeight);
 }
