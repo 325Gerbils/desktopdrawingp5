@@ -76,7 +76,7 @@ function draw() {
     cursor();
     image(colorPicker, 0, 0, width, height);
     strokeWeight(2);
-    fill(get(mouseX, mouseY));
+    //fill(get(mouseX, mouseY));
     ellipse(mouseX+30, mouseY+40, 50, 50);
   } else {
     noCursor();
@@ -111,7 +111,7 @@ function draw() {
     } else if (ePressed) {
       cursor();
       strokeWeight(2);
-      fill(get(mouseX, mouseY));
+      //fill(get(mouseX, mouseY));
       ellipse(mouseX+30, mouseY+40, 50, 50);
     } else { // scribble
       point(mouseX, mouseY);
@@ -236,7 +236,6 @@ function mouseReleased() {
 function mouseWheel(event) {
   if (colorPickerShowing) {
     brightness = constrain(brightness - event.delta, 0, 255);
-    //colorPicker.tint(brightness);
     drawColorPicker();
   } else {
     strkWeight = constrain(strkWeight - event.delta/(shiftPressed?15:(altPressed?500:150)), 1, 1000);
@@ -251,10 +250,7 @@ function drawColorPicker() {
   var w = 32;
   for (let i = 0; i < colorPicker.width/w; i++) {
     for (let j = 0; j < colorPicker.height/w; j++) {
-      //var clr = color(i/width, j/height, brightness);
-      //colorPicker.fill(random(255), random(255), random(255));
       colorPicker.fill(i/(colorPicker.width/w)*255, 255-j/(colorPicker.height/w)*255, round(brightness/w)*w);
-      //colorPicker.point(i, j);
       colorPicker.rect(i*w, j*w, w, w);
     }
   }
