@@ -27,18 +27,23 @@ function setup() {
 }
 
 function draw() {
+  // pGraphics.stroke(random(255), random(255), random(255));
   if (mouseIsPressed && drawingMode == 0) {
     pGraphics.line(mouseX, mouseY, pmousex, pmousey);
   }
   image(pGraphics, 0, 0, width, height);
 
-  if (mouseIsPressed && drawingMode == 1) {
+  if (mouseIsPressed && drawingMode == 1 && rPressed) {
     rect(vertex1.x, vertex1.y, mouseX, mouseY);
   }
 
-  if (mouseIsPressed && drawingMode == 2) {
+  if (mouseIsPressed && drawingMode == 2 && cPressed) {
     var r = sqrt((mouseX-vertex1.x)*(mouseX-vertex1.x) + (mouseY-vertex1.y)*(mouseY-vertex1.y));
     ellipse(vertex1.x, vertex1.y, r*2, r*2);
+  }
+
+  if (backgroundShowing) {
+    image(bg, 0, 0, width, height);
   }
 
   pmousex = mouseX;
@@ -51,13 +56,9 @@ function keyPressed() {
   }
   if (key == 'w') {
     if (!backgroundShowing) {
-      pGraphics.image(bg, 0, 0, width, height);
       backgroundShowing = true;
-      noLoop();
     } else {
-      pGraphics.background(255);
       backgroundShowing = false;
-      loop();
     }
   }
   if (key == 'c') {
@@ -98,11 +99,11 @@ function mousePressed() {
 }
 
 function mouseReleased() {
-  if (drawingMode == 1) {
+  if (drawingMode == 1 && rPressed) {
     pGraphics.rect(vertex1.x, vertex1.y, mouseX, mouseY);
     rect(vertex1.x, vertex1.y, mouseX, mouseY);
   }
-  if (drawingMode == 2) {
+  if (drawingMode == 2 && cPressed) {
     var r = sqrt((mouseX-vertex1.x)*(mouseX-vertex1.x) + (mouseY-vertex1.y)*(mouseY-vertex1.y));
     ellipse(vertex1.x, vertex1.y, r*2, r*2);
     pGraphics.ellipse(vertex1.x, vertex1.y, r*2, r*2);
