@@ -2,12 +2,11 @@ var pmousex, pmousey;
 var bg, drawOn;
 var drawingMode;
 let pGraphics;  
-var pmousepressed = false;
 var vertex1;
 var backgroundShowing = false;
 var rPressed, cPressed, iPressed, lPressed;
 var strkWeight;
-
+var whiteDrawing = false;
 let input;
 
 function setup() {
@@ -45,6 +44,14 @@ function draw() {
     input.position(0, 0);
   } else {
     input.position(-9999, -9999);
+  }
+
+  if(whiteDrawing) {
+    stroke(255);
+    pGraphics.stroke(255);
+  }else{
+    stroke(0);
+     pGraphics.stroke(0);
   }
 
   if (backgroundShowing) {
@@ -108,6 +115,9 @@ function keyPressed() {
   if (key == 'i') {
     iPressed = true;
   }
+  if (key == 'x') {
+    whiteDrawing = !whiteDrawing;
+  }
 }
 
 function keyReleased() {
@@ -150,7 +160,7 @@ function mouseReleased() {
   drawingMode = 0;
 }
 function mouseWheel(event) {
-  strkWeight = constrain(strkWeight + event.delta/200, 0.5, 100);
+  strkWeight = constrain(strkWeight + event.delta/200, 0.5, 1000);
   pGraphics.strokeWeight(strkWeight);
   strokeWeight(strkWeight);
 }
