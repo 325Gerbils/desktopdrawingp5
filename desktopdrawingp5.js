@@ -51,7 +51,7 @@ function draw() {
   }
   
   if (showingColorPicker) {
-    colorPicker.position(width-40, 0);
+    colorPicker.position(width-45, 0);
   } else {
     colorPicker.position(-9999, -9999);
   }
