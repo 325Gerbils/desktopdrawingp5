@@ -60,7 +60,7 @@ function draw() {
   if (iPressed) {
     input.position(0, 0);
   } else {
-    input.position(9000, 9000);
+    input.position(-9000, -9000);
   }
 
   pmousex = mouseX;
