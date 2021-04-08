@@ -5,7 +5,9 @@ let pGraphics;
 var pmousepressed = false;
 var vertex1;
 var backgroundShowing = false;
-var rPressed, cPressed;
+var rPressed, cPressed, iPressed, lPressed;
+
+let input;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -24,6 +26,14 @@ function setup() {
   bg = loadImage("data/background.jpg");
   drawingMode = 0;
   rPressed = false;
+  input = createFileInput(function handleFile(file) {
+    if (file.type === 'image') {
+      bg = createImg(file.data, '');
+      bg.hide();
+    }
+  }
+  );
+  input.position(-9999, -9999);
 }
 
 function draw() {
@@ -45,6 +55,12 @@ function draw() {
       var r = sqrt((mouseX-vertex1.x)*(mouseX-vertex1.x) + (mouseY-vertex1.y)*(mouseY-vertex1.y));
       ellipse(vertex1.x, vertex1.y, r*2, r*2);
     }
+  }
+
+  if (iPressed) {
+    input.position(0, 0);
+  } else {
+    input.position(9000, 9000);
   }
 
   pmousex = mouseX;
@@ -76,6 +92,16 @@ function keyPressed() {
       vertex1 = createVector(mouseX, mouseY);
     }
   }
+  if (key == 'l') {
+    lPressed = true;
+    drawingMode = 3;
+    if (mouseIsPressed) {
+      vertex1 = createVector(mouseX, mouseY);
+    }
+  }
+  if (key == 'i') {
+    iPressed = true;
+  }
 }
 
 function keyReleased() {
@@ -84,6 +110,12 @@ function keyReleased() {
   }
   if (key == 'c') {
     cPressed = false;
+  }
+  if (key == 'l') {
+    lPressed = false;
+  }
+  if (key == 'i') {
+    iPressed = false;
   }
 }
 
