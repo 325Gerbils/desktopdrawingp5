@@ -76,7 +76,7 @@ function draw() {
     cursor();
     image(colorPicker, 0, 0, width, height);
     strokeWeight(2);
-    //fill(get(mouseX, mouseY));
+    fill(get(mouseX, mouseY));
     ellipse(mouseX+30, mouseY+40, 50, 50);
   } else {
     noCursor();
@@ -111,7 +111,7 @@ function draw() {
     } else if (ePressed) {
       cursor();
       strokeWeight(2);
-      //fill(get(mouseX, mouseY));
+      fill(get(mouseX, mouseY));
       ellipse(mouseX+30, mouseY+40, 50, 50);
     } else { // scribble
       point(mouseX, mouseY);
