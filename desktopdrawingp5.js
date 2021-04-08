@@ -27,23 +27,24 @@ function setup() {
 }
 
 function draw() {
-  // pGraphics.stroke(random(255), random(255), random(255));
-  if (mouseIsPressed && drawingMode == 0) {
-    pGraphics.line(mouseX, mouseY, pmousex, pmousey);
-  }
-  image(pGraphics, 0, 0, width, height);
-
-  if (mouseIsPressed && drawingMode == 1 && rPressed) {
-    rect(vertex1.x, vertex1.y, mouseX, mouseY);
-  }
-
-  if (mouseIsPressed && drawingMode == 2 && cPressed) {
-    var r = sqrt((mouseX-vertex1.x)*(mouseX-vertex1.x) + (mouseY-vertex1.y)*(mouseY-vertex1.y));
-    ellipse(vertex1.x, vertex1.y, r*2, r*2);
-  }
 
   if (backgroundShowing) {
     image(bg, 0, 0, width, height);
+  } else {
+
+    if (mouseIsPressed && drawingMode == 0) {
+      pGraphics.line(mouseX, mouseY, pmousex, pmousey);
+    }
+    image(pGraphics, 0, 0, width, height);
+
+    if (mouseIsPressed && drawingMode == 1 && rPressed) {
+      rect(vertex1.x, vertex1.y, mouseX, mouseY);
+    }
+
+    if (mouseIsPressed && drawingMode == 2 && cPressed) {
+      var r = sqrt((mouseX-vertex1.x)*(mouseX-vertex1.x) + (mouseY-vertex1.y)*(mouseY-vertex1.y));
+      ellipse(vertex1.x, vertex1.y, r*2, r*2);
+    }
   }
 
   pmousex = mouseX;
