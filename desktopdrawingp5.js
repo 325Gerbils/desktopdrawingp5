@@ -14,6 +14,7 @@ var colorPickerShowing;
 var fillMode = false;
 var shiftPressed, altPressed;
 var brightness;
+var undoStack = [];
 var lastGraphics;
 var scribbleGraphics;
 
@@ -47,6 +48,7 @@ function setup() {
     lastGraphics = createGraphics(pGraphics.width, pGraphics.height);
     scribbleGraphics = createGraphics(pGraphics.width, pGraphics.height);
     drawColorPicker();
+    undoStack[0] = pGraphics;
 }
 
 function draw() {
@@ -276,10 +278,15 @@ function drawColorPicker() {
 }
 
 function saveState() {
+    lastGraphics = createGraphics(pGraphics.width, pGraphics.height);
     lastGraphics.image(pGraphics, 0, 0, lastGraphics.width, lastGraphics.height);
+    undoStack.push(lastGraphics);
+    print(undoStack);
 }
 
 function undo() {
     scribbleGraphics.clear();
-    pGraphics.image(lastGraphics, 0, 0, pGraphics.width, pGraphics.height);
+    print(undoStack)
+    pGraphics.image(undoStack[undoStack.length - 1], 0, 0, pGraphics.width, pGraphics.height);
+    undoStack.pop();
 }
