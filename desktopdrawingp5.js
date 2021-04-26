@@ -287,33 +287,23 @@ function drawColorPicker() {
 function saveState() {
     lastGraphics = createGraphics(pGraphics.width, pGraphics.height);
     lastGraphics.image(pGraphics, 0, 0, lastGraphics.width, lastGraphics.height);
-    print(undoCounter);
     undoStack = undoStack.slice(0, undoCounter)
     undoStack.push(lastGraphics);
     undoCounter = undoStack.length;
-    print(undoStack);
 }
 
 function undo() {
     scribbleGraphics.clear();
-    print(undoStack)
-    if (undoStack.length <= 1) {
-        console.log("no more to undo")
-        return
-    }
     undoCounter--;
     pGraphics.image(undoStack[undoCounter - 1], 0, 0, pGraphics.width, pGraphics.height);
-    print(undoCounter);
 }
 
 function redo() {
     scribbleGraphics.clear();
-    print(undoStack)
     if (undoCounter >= undoStack.length) {
-        console.log("no more to redo")
+        print("no more to redo")
         return
     }
     undoCounter++;
     pGraphics.image(undoStack[undoCounter - 1], 0, 0, pGraphics.width, pGraphics.height);
-    print(undoCounter);
 }
