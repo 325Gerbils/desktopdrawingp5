@@ -129,6 +129,7 @@ function draw() {
 function keyPressed() {
     if (key == ' ' && !backgroundShowing) {
         pGraphics.background(255);
+        scribbleGraphics.clear();
     }
     if (key == 'w') {
         if (!backgroundShowing) {
