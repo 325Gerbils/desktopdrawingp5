@@ -15,6 +15,7 @@ var fillMode = false;
 var shiftPressed, altPressed;
 var brightness;
 var lastGraphics;
+var scribbleGraphics;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -44,6 +45,7 @@ function setup() {
     input.position(-9999, -9999);
     colorPicker = createGraphics(windowWidth, windowHeight);
     lastGraphics = createGraphics(pGraphics.width, pGraphics.height);
+    scribbleGraphics = createGraphics(pGraphics.width, pGraphics.height);
     drawColorPicker();
 }
 
@@ -66,6 +68,7 @@ function draw() {
 
     stroke(currentColor);
     pGraphics.stroke(currentColor);
+    scribbleGraphics.stroke(currentColor);
 
     if (backgroundShowing) {
         image(bg, 0, 0, width, height);
@@ -79,10 +82,10 @@ function draw() {
     } else {
         noCursor();
         if (mouseIsPressed && mouseButton == LEFT && drawingMode == 0 && !ePressed) {
-            saveState();
-            pGraphics.line(mouseX, mouseY, pmouseX, pmouseY);
+            scribbleGraphics.line(mouseX, mouseY, pmouseX, pmouseY);
         }
         image(pGraphics, 0, 0, width, height);
+        image(scribbleGraphics, 0, 0, width, height);
 
         if (mouseIsPressed && mouseButton == LEFT && drawingMode == 1 && rPressed) {
             rect(vertex1.x, vertex1.y, mouseX, mouseY);
@@ -116,6 +119,7 @@ function draw() {
             point(mouseX, mouseY);
         }
         strokeWeight(strkWeight);
+        scribbleGraphics.strokeWeight(strkWeight);
     }
 }
 
@@ -220,10 +224,17 @@ function mousePressed() {
     if (drawingMode != 0) {
         vertex1 = createVector(mouseX, mouseY);
     }
+    if (drawingMode == 0) {
+        scribbleGraphics.clear();
+    }
 }
 
 function mouseReleased() {
     saveState();
+    if (drawingMode == 0 && !ePressed) {
+        pGraphics.image(scribbleGraphics, 0, 0, pGraphics.width, pGraphics.height);
+        image(scribbleGraphics, 0, 0, pGraphics.width, pGraphics.height);
+    }
     if (drawingMode == 1 && rPressed) {
         pGraphics.rect(vertex1.x, vertex1.y, mouseX, mouseY);
         rect(vertex1.x, vertex1.y, mouseX, mouseY);
@@ -248,6 +259,7 @@ function mouseWheel(event) {
         strkWeight = constrain(strkWeight - event.delta / (shiftPressed ? 15 : (altPressed ? 500 : 150)), 1, 1000);
         pGraphics.strokeWeight(strkWeight);
         strokeWeight(strkWeight);
+        scribbleGraphics.strokeWeight(strkWeight);
     }
 }
 
@@ -268,5 +280,6 @@ function saveState() {
 }
 
 function undo() {
+    scribbleGraphics.clear();
     pGraphics.image(lastGraphics, 0, 0, pGraphics.width, pGraphics.height);
 }
