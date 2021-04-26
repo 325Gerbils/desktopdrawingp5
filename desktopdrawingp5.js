@@ -49,7 +49,7 @@ function setup() {
     lastGraphics = createGraphics(pGraphics.width, pGraphics.height);
     scribbleGraphics = createGraphics(pGraphics.width, pGraphics.height);
     drawColorPicker();
-    undoStack[0] = pGraphics;
+    saveState()
 }
 
 function draw() {
