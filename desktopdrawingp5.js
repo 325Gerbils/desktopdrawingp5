@@ -17,6 +17,7 @@ var brightness;
 var undoStack = [];
 var lastGraphics;
 var scribbleGraphics;
+var undoCounter;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -181,6 +182,9 @@ function keyPressed() {
     if (key == 's') {
         save();
     }
+    if (key == 'y') {
+        redo();
+    }
 }
 
 function keyReleased() {
@@ -232,7 +236,6 @@ function mousePressed() {
 }
 
 function mouseReleased() {
-    saveState();
     if (drawingMode == 0 && !ePressed) {
         pGraphics.image(scribbleGraphics, 0, 0, pGraphics.width, pGraphics.height);
         image(scribbleGraphics, 0, 0, pGraphics.width, pGraphics.height);
@@ -250,6 +253,7 @@ function mouseReleased() {
         line(vertex1.x, vertex1.y, mouseX, mouseY);
         pGraphics.line(vertex1.x, vertex1.y, mouseX, mouseY);
     }
+    saveState();
     drawingMode = 0;
 }
 
@@ -281,12 +285,28 @@ function saveState() {
     lastGraphics = createGraphics(pGraphics.width, pGraphics.height);
     lastGraphics.image(pGraphics, 0, 0, lastGraphics.width, lastGraphics.height);
     undoStack.push(lastGraphics);
+    undoCounter = undoStack.length;
     print(undoStack);
 }
 
 function undo() {
     scribbleGraphics.clear();
     print(undoStack)
-    pGraphics.image(undoStack[undoStack.length - 1], 0, 0, pGraphics.width, pGraphics.height);
-    undoStack.pop();
+    if (undoStack.length <= 1) {
+        console.log("no more to undo")
+        return
+    }
+    undoCounter--;
+    pGraphics.image(undoStack[undoCounter - 1], 0, 0, pGraphics.width, pGraphics.height);
+}
+
+function redo() {
+    scribbleGraphics.clear();
+    print(undoStack)
+    if (undoCounter >= undoStack.length) {
+        console.log("no more to redo")
+        return
+    }
+    undoCounter++;
+    pGraphics.image(undoStack[undoCounter - 1], 0, 0, pGraphics.width, pGraphics.height);
 }
