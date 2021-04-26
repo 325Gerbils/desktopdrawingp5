@@ -254,7 +254,9 @@ function mouseReleased() {
         line(vertex1.x, vertex1.y, mouseX, mouseY);
         pGraphics.line(vertex1.x, vertex1.y, mouseX, mouseY);
     }
-    saveState();
+    if (!hPressed) {
+        saveState();
+    }
     drawingMode = 0;
 }
 
@@ -285,6 +287,8 @@ function drawColorPicker() {
 function saveState() {
     lastGraphics = createGraphics(pGraphics.width, pGraphics.height);
     lastGraphics.image(pGraphics, 0, 0, lastGraphics.width, lastGraphics.height);
+    print(undoCounter);
+    undoStack = undoStack.slice(0, undoCounter)
     undoStack.push(lastGraphics);
     undoCounter = undoStack.length;
     print(undoStack);
@@ -299,6 +303,7 @@ function undo() {
     }
     undoCounter--;
     pGraphics.image(undoStack[undoCounter - 1], 0, 0, pGraphics.width, pGraphics.height);
+    print(undoCounter);
 }
 
 function redo() {
@@ -310,4 +315,5 @@ function redo() {
     }
     undoCounter++;
     pGraphics.image(undoStack[undoCounter - 1], 0, 0, pGraphics.width, pGraphics.height);
+    print(undoCounter);
 }
